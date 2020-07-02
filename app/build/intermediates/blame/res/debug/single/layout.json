@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_login.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\layout_country_list_item.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\layout_country_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\layout_loading_list_item.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\layout_loading_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_base.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\activity_base.xml"
+    },
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\layout_category_list_item.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\layout_category_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_country_list.xml",
+        "source": "C:\\Users\\MAC\\StudioProjects\\Assignment\\app\\src\\main\\res\\layout\\activity_country_list.xml"
+    }
+]
