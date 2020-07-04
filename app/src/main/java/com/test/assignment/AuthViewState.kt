@@ -1,31 +1,33 @@
 package com.test.assignment
 
 data class AuthViewState(
-    var loginFields: LoginFields? = LoginFields()
+        var loginFields: LoginFields? = LoginFields(),
+        var authToken: AuthToken? = AuthToken()
 )
 
 data class LoginFields(
-    var login_email: String? = null,
-    var login_password: String? = null
-){
+        var login_email: String? = null,
+        var login_password: String? = null
+) {
     class LoginError {
 
-        companion object{
+        companion object {
 
-            fun mustFillAllFields(): String{
+            fun mustFillAllFields(): String {
                 return "You can't login without an email and password."
             }
 
-            fun none():String{
+            fun none(): String {
                 return "None"
             }
 
         }
     }
-    fun isValidForLogin(): String{
 
-        if(login_email.isNullOrEmpty()
-            || login_password.isNullOrEmpty()){
+    fun isValidForLogin(): String {
+
+        if (login_email.isNullOrEmpty()
+                || login_password.isNullOrEmpty()) {
 
             return LoginError.mustFillAllFields()
         }
@@ -37,4 +39,8 @@ data class LoginFields(
     }
 }
 
+data class AuthToken(
+        var code: String? = null,
+        var message: String? = null
+)
 

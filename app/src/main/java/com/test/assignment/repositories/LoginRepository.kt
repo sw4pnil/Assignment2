@@ -1,16 +1,13 @@
 package com.test.assignment.repositories
 
 import androidx.lifecycle.LiveData
-import com.test.assignment.AuthViewState
-import com.test.assignment.DataState
-import com.test.assignment.Response
-import com.test.assignment.ResponseType
 import com.test.assignment.custom.errors.ErrorHandler.ERROR_UNKNOWN
 import com.test.assignment.models.LoggedInUser
 import com.test.assignment.requests.api.CredentialCheckApi
 import com.test.assignment.util.ApiErrorResponse
 import com.test.assignment.util.ApiSuccessResponse
 import androidx.lifecycle.switchMap
+import com.test.assignment.*
 import com.test.assignment.util.ApiEmptyResponse
 
 /**
@@ -43,7 +40,7 @@ class LoginRepository(val openApiAuthService: CredentialCheckApi) {
                                 is ApiSuccessResponse ->{
                                     value = DataState.data(
                                             AuthViewState(
-                                                    authToken = AuthToken(response.body.pk, response.body.token)
+                                                    authToken = AuthToken(response.body.code, response.body.message)
                                             ),
                                             response = null
                                     )

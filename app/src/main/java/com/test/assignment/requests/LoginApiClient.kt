@@ -1,17 +1,10 @@
 package com.test.assignment.requests
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.test.assignment.AppExecutors
 import com.test.assignment.models.Country
-import com.test.assignment.models.LoggedInUser
-import com.test.assignment.models.Result
-import com.test.assignment.requests.api.CredentialCheckApi
 import com.test.assignment.util.Constants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import org.json.JSONArray
@@ -24,49 +17,9 @@ import java.util.concurrent.TimeUnit
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginApiClient internal constructor() {
-    var loginApiInterface = (CredentialCheckApi::class.java)
 
     private val mCategory: MutableLiveData<List<Country>?> = MutableLiveData()
     private val mCountryName: MutableLiveData<String?> = MutableLiveData()
-    private var mRetrieveCredentialRunnable: CredentialCheckRunnable? = null
-
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        return try {
-
-            CoroutineScope(IO).launch {
-                loginCall(username, password)
-            }
-
-            val fakeUser = LoggedInUser(UUID.randomUUID().toString(), username, password)
-            Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            Result.Error(IOException("Error logging in", e))
-        }
-    }
-
-    private suspend fun loginCall(username: String, password: String) =
-            loginApiInterface.login(username, password)
-                    .run {
-                        if (isSuccessful && body() != null) {
-
-                            Log.d("swapnil", body()?.code)
-                            /* stringKeyValueDao.insert(
-                                     Utils.getCurrentTimeKeyValuePair(Utils.LAST_WEATHER_API_CALL_TIMESTAMP)
-                             )
-                             weatherDao.deleteAllAndInsert(WeatherMapper(body()!!).map())
-                             getDataOrError(NoDataException())*/
-                        } else {
-                            /* Error(
-                                     NoResponseException(
-                                             ErrorHandler.parseError<ErrorResponse>(errorBody()?.message
-                                     )
-                             )*/
-                        }
-                    }
-
-    fun logout() {
-        // TODO: revoke authentication
-    }
 
     private var mRetrieveCountryRunnable: CredentialCheckRunnable? = null
     var arrayListDetails: ArrayList<Country> = ArrayList()
