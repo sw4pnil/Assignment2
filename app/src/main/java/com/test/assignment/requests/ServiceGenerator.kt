@@ -10,11 +10,14 @@ import okhttp3.Request
  * OkHttp Client used to handle json format
  */
 object ServiceGenerator {
-    private val request = Request.Builder()
+    private val request1 = Request.Builder()
             .url(Constants.BASE_URL)
-    private val requestCall = request.build()
-    private val client = OkHttpClient().newCall(requestCall)
+    private val requestCall1 = request1.build()
+    private val client1 = OkHttpClient().newCall(requestCall1)
     fun getCountryApiCall(): Call {
-        return client
+        return client1
     }
+
+
+
 }

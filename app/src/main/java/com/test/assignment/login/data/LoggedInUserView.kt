@@ -1,4 +1,4 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.login.data
 
 /**
  * User details post authentication that is exposed to the UI

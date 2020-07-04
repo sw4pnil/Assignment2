@@ -1,14 +1,17 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.viewmodels
 
 import android.util.Patterns
 import android.view.View
-import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.test.assignment.R
-import com.test.assignment.login.data.LoginRepository
-import com.test.assignment.login.data.Result
+import com.test.assignment.login.data.Data
+import com.test.assignment.login.data.LoggedInUserView
+import com.test.assignment.login.data.LoginFormState
+import com.test.assignment.login.data.LoginResult
+import com.test.assignment.repositories.LoginRepository
+import com.test.assignment.models.Result
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -44,14 +47,18 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 */
     fun login(view: View?) {
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(EmailAddress.value!!, Password.value!!)
+
+       if(!EmailAddress.value.isNullOrEmpty() && !Password.value.isNullOrEmpty()){
+           val result = loginRepository.login(EmailAddress.value!!, Password.value!!)
+
 
         if (result is Result.Success) {
            // userMutableLiveData?.setValue(result)
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.userId))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
+       }
     }
 
     fun loginDataChanged(username: String, password: String) {

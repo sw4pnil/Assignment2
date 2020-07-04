@@ -27,10 +27,10 @@ class CountryListActivity : BaseActivity(), OnCountryClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_country_list)
         mRecyclerView = findViewById(R.id.recipe_list)
-        mCountryListViewModel = ViewModelProviders.of(this).get(CountryListViewModel::class.java)
+        this.mCountryListViewModel = ViewModelProviders.of(this).get(CountryListViewModel::class.java)
         initRecyclerView()
         subscribeObservers()
-        mCountryListViewModel!!.countryDetail()
+        this.mCountryListViewModel!!.countryDetail()
     }
 
     private fun subscribeObservers() {

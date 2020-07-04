@@ -1,4 +1,4 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.login
 
 import android.app.Activity
 import android.content.Intent
@@ -18,6 +18,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.test.assignment.CountryListActivity
 import com.test.assignment.R
 import com.test.assignment.databinding.ActivityLoginBinding
+import com.test.assignment.login.data.LoggedInUserView
+import com.test.assignment.viewmodels.LoginViewModel
+import com.test.assignment.viewmodels_factory.LoginViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -96,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
                  loginViewModel.login(username.text.toString(), password_edt_txt.text.toString())
              }*/
         }
+
         switch1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

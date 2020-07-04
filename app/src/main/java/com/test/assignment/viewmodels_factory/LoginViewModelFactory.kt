@@ -1,24 +1,26 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.viewmodels_factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.test.assignment.login.data.LoginDataSource
-import com.test.assignment.login.data.LoginRepository
+import com.test.assignment.requests.LoginApiClient
+import com.test.assignment.repositories.LoginRepository
+import com.test.assignment.viewmodels.LoginViewModel
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
+@Suppress("UNCHECKED_CAST")
 class LoginViewModelFactory : ViewModelProvider.Factory {
 
-    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                     loginRepository = LoginRepository(
-                            dataSource = LoginDataSource()
+                            dataSource = LoginApiClient()
                     )
-            ) as T
+            ) as
+                    T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

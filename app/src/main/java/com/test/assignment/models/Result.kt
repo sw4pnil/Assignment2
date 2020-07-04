@@ -1,4 +1,4 @@
-package com.test.assignment.login.data
+package com.test.assignment.models
 
 /**
  * A generic class that holds a value with its loading status.

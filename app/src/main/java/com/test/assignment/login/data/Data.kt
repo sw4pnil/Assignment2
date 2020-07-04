@@ -1,4 +1,4 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.login.data
 
 /**
  * Data validation state of the login form.

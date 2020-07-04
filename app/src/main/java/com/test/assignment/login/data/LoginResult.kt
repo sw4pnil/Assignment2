@@ -1,4 +1,6 @@
-package com.test.assignment.login.ui.login
+package com.test.assignment.login.data
+
+import com.test.assignment.login.data.LoggedInUserView
 
 /**
  * Authentication result : success (user details) or error message.
