@@ -7,19 +7,17 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.test.assignment.CountryListActivity
+import com.test.assignment.DetailListActivity
 import com.test.assignment.R
 import com.test.assignment.databinding.ActivityLoginBinding
-import com.test.assignment.login.data.LoggedInUserView
-import com.test.assignment.viewmodels.CountryListViewModel
 import com.test.assignment.viewmodels.LoginViewModel
 import com.test.assignment.viewmodels.LoginViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
@@ -29,11 +27,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+
         super.onCreate(savedInstanceState)
 
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
-        //this.mCountryListViewModel = ViewModelProviders.of(this).get(CountryListViewModel::class.java)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
@@ -55,52 +54,35 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        loginViewModel.loginResult.observe(this, Observer {
+        loginViewModel.loginResult?.observe(this, Observer {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
 
-            //Complete and destroy login activity once successful
-            finish()
+            when (loginResult.code()) {
+                200 -> {
+                    updateUiWithUser(loginResult.body()?.token())
+                    setResult(Activity.RESULT_OK)
+
+                    //Complete and destroy login activity once successful
+                    finish()
+                }
+                400 -> showLoginFailed(loginResult.body()?.description())
+                401 -> showLoginFailed(loginResult.body()?.description())
+
+            }
+
         })
 
-        username.afterTextChanged {
-            loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password_edt_txt.text.toString()
-            )
+        username.apply {
+            afterTextChanged {
+                loginViewModel.loginDataChanged()
+            }
         }
-
         password_edt_txt.apply {
             afterTextChanged {
-                loginViewModel.loginDataChanged(
-                        username.text.toString(),
-                        password_edt_txt.text.toString()
-                )
+                loginViewModel.loginDataChanged()
             }
-
-            /* setOnEditorActionListener { _, actionId, _ ->
-                 when (actionId) {
-                     EditorInfo.IME_ACTION_DONE ->
-                         loginViewModel.login(
-                                 username.text.toString(),
-                                 password_edt_txt.text.toString()
-                         )
-                 }
-                 false
-             }
-
-             login.setOnClickListener {
-                 loading.visibility = View.VISIBLE
-                 loginViewModel.login(username.text.toString(), password_edt_txt.text.toString())
-             }*/
         }
 
         switch1.setOnCheckedChangeListener { _, isChecked ->
@@ -116,13 +98,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
-
-        startActivity(Intent(this, CountryListActivity::class.java))
-
+    private fun updateUiWithUser(displayName: String?) {
+        startActivity(Intent(this, DetailListActivity::class.java))
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
         Toast.makeText(
                 applicationContext,
                 "$welcome $displayName",
@@ -130,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: String?) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 

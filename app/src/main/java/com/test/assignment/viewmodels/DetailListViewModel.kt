@@ -2,27 +2,27 @@ package com.test.assignment.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.test.assignment.models.Country
-import com.test.assignment.repositories.CountryRepository
+import com.test.assignment.models.Detail
+import com.test.assignment.repositories.DetailRepository
 
 /**
- * @author swapnil-tml on 26-06-2020.
+ * @author swapnil tripathi 5 july
  * view model for list data handling
  */
 
-class CountryListViewModel : ViewModel() {
-    private val mCountryRepository: CountryRepository? = CountryRepository.instance
+class DetailListViewModel : ViewModel() {
+    private val mDetailRepository: DetailRepository? = DetailRepository.instance
     var isViewingRecipes = false
     private var mIsPerformingQuery: Boolean
-    val categoryList: LiveData<List<Country>?>?
-        get() = mCountryRepository?.categoryName
-    val countryName : LiveData<String?>?
-        get() = mCountryRepository?.countryName
+    val categoryList: LiveData<List<Detail>?>?
+        get() = mDetailRepository?.categoryName
+    val detailPage : LiveData<String?>?
+        get() = mDetailRepository?.detailPage
 
-    fun countryDetail() {
+    fun detailList() {
         isViewingRecipes = true
         mIsPerformingQuery = true
-        mCountryRepository?.countryDetailApi()
+        mDetailRepository?.detailApi()
     }
 
     fun setIsPerformingQuery(isPerformingQuery: Boolean) {
@@ -31,7 +31,7 @@ class CountryListViewModel : ViewModel() {
 
     fun onBackPressed(): Boolean {
         if (mIsPerformingQuery) {
-            mCountryRepository?.cancelRequest()
+            mDetailRepository?.cancelRequest()
         }
         if (isViewingRecipes) {
             isViewingRecipes = false
@@ -43,12 +43,12 @@ class CountryListViewModel : ViewModel() {
     fun searchNextPage() {
         if (!mIsPerformingQuery
                 && isViewingRecipes) {
-            mCountryRepository?.searchNextPage()
+            mDetailRepository?.searchNextPage()
         }
     }
 
     companion object {
-        private const val TAG = "CountryListViewModel"
+        private const val TAG = "DetailListViewModel"
     }
 
     init {

@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.test.assignment.R
-import com.test.assignment.models.Country
+import com.test.assignment.models.Detail
 import java.util.*
 
 /**
- * @author swapnil-tml on 26-06-2020.
- * Recycler view for Country List items
+ * @author swapnil tripathi 5 july
+ * Recycler view for Detail List items
  */
 
 
-class CountryRecyclerAdapter(private val mOnCountryClickListener: OnCountryClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mCategory: List<Country>
+class DetailRecyclerAdapter(private val mOnDetailClickListener: OnDetailClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var mCategory: List<Detail>
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RecyclerView.ViewHolder {
         var view: View?
@@ -28,8 +28,8 @@ class CountryRecyclerAdapter(private val mOnCountryClickListener: OnCountryClick
                 LoadingViewHolder(view)
             }
             else -> {
-                view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_country_list_item, viewGroup, false)
-                CountryDetailViewHolder(view, mOnCountryClickListener)
+                view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_category_list_item, viewGroup, false)
+                DetailViewHolder(view, mOnDetailClickListener)
             }
         }
     }
@@ -41,12 +41,12 @@ class CountryRecyclerAdapter(private val mOnCountryClickListener: OnCountryClick
                     .centerCrop()
                     .error(R.drawable.ic_launcher_background)
             val path = Uri.parse(mCategory[i].getImageHref())
-            Glide.with((viewHolder as CountryDetailViewHolder).itemView)
+            Glide.with((viewHolder as DetailViewHolder).itemView)
                     .setDefaultRequestOptions(options)
                     .load(path)
                     .into(viewHolder.image)
             viewHolder.title.text = mCategory[i].getTitle()
-            viewHolder.description.text = mCategory[i].getDescription()
+            viewHolder.description.text = mCategory[i].getBy()
         }
     }
 
@@ -64,9 +64,9 @@ class CountryRecyclerAdapter(private val mOnCountryClickListener: OnCountryClick
 
     fun displayLoading() {
         if (!isLoading) {
-            val recipe = Country()
+            val recipe = Detail()
             recipe.setTitle("LOADING...")
-            val loadingList: MutableList<Country> = ArrayList()
+            val loadingList: MutableList<Detail> = ArrayList()
             loadingList.add(recipe)
             mCategory = loadingList
             notifyDataSetChanged()
@@ -83,7 +83,7 @@ class CountryRecyclerAdapter(private val mOnCountryClickListener: OnCountryClick
             return false
         }
 
-    fun setRecipes(recipes: List<Country>) {
+    fun setRecipes(recipes: List<Detail>) {
         mCategory = recipes
         notifyDataSetChanged()
     }

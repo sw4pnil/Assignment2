@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 /**
- * @author swapnil-tml on 26-06-2020.
+ * @author swapnil tripathi 5 july
  * vertical spacing...decorator
  */
 

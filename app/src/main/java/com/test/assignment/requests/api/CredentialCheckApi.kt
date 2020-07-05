@@ -1,19 +1,18 @@
 package com.test.assignment.requests.api
 
-import androidx.lifecycle.LiveData
 import com.test.assignment.requests.response.LoginResponse
-import com.test.assignment.util.GenericApiResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.Call
+import retrofit2.http.*
 
 interface CredentialCheckApi {
 
     // CHECK CRED
     @POST("login")
     @FormUrlEncoded
-    fun login(
-            @Field("user_id") email: String,
+    fun loginCheck(
+            @Header("x-api-key") privilege_key: String,
+            @Field("username") email: String,
             @Field("password") password: String
-    ): LiveData<GenericApiResponse<LoginResponse>>
+    ): Call<LoginResponse>
+
 }
