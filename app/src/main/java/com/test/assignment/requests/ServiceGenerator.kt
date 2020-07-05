@@ -1,9 +1,7 @@
 package com.test.assignment.requests
 
-import com.google.gson.Gson
 import com.test.assignment.requests.api.CredentialCheckApi
 import com.test.assignment.util.Constants
-import com.test.assignment.util.LiveDataCallAdapter
 import com.test.assignment.util.LiveDataCallAdapterFactory
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -25,12 +23,29 @@ object ServiceGenerator {
     }
 
 
-    fun provideRetrofitBuilder(gsonBuilder: Gson): Retrofit.Builder{
+    fun provideRetrofitBuilder(): CredentialCheckApi {
         return Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL1)
+                .baseUrl(Constants.BASE_URL)
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                .addConverterFactory(GsonConverterFactory.create(gsonBuilder))
+                .addConverterFactory(GsonConverterFactory.create()).build().create(CredentialCheckApi::class.java)
     }
 
+    private val retrofitBuilder = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
 
+    /* private val retrofit = Retrofit.Builder()
+             .baseUrl(Constants.BASE_URL)
+             .addCallAdapterFactory(LiveDataCallAdapterFactory())
+             .addConverterFactory(GsonConverterFactory.create()).build()
+
+     private val recipeApi: RecipeApi = Retrofit.Builder()
+             .baseUrl(Constants.BASE_URL)
+             .addCallAdapterFactory(LiveDataCallAdapterFactory())
+             .addConverterFactory(GsonConverterFactory.create()).build().create(CredentialCheckApi::class.java)
+
+     fun getRecipeApi(): RecipeApi? {
+         return recipeApi
+     }*/
 }

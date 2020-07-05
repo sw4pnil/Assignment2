@@ -1,21 +1,14 @@
 package com.test.assignment.repositories
 
-import androidx.lifecycle.LiveData
-import com.test.assignment.custom.errors.ErrorHandler.ERROR_UNKNOWN
 import com.test.assignment.models.LoggedInUser
-import com.test.assignment.requests.api.CredentialCheckApi
-import com.test.assignment.util.ApiErrorResponse
-import com.test.assignment.util.ApiSuccessResponse
-import androidx.lifecycle.switchMap
-import com.test.assignment.*
-import com.test.assignment.util.ApiEmptyResponse
+import com.test.assignment.requests.LoginApiClient
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val openApiAuthService: CredentialCheckApi) {
+class LoginRepository(val dataSource: LoginApiClient) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -30,41 +23,8 @@ class LoginRepository(val openApiAuthService: CredentialCheckApi) {
         user = null
     }
 
-    fun attemptLogin(email: String, password: String): LiveData<DataState<AuthViewState>> {
-        return openApiAuthService.login(email, password)
-                .switchMap { response ->
-                    object: LiveData<DataState<AuthViewState>>(){
-                        override fun onActive() {
-                            super.onActive()
-                            when(response){
-                                is ApiSuccessResponse ->{
-                                    value = DataState.data(
-                                            AuthViewState(
-                                                    authToken = AuthToken(response.body.code, response.body.message)
-                                            ),
-                                            response = null
-                                    )
-                                }
-                                is ApiErrorResponse ->{
-                                    value = DataState.error(
-                                            Response(
-                                                    message = response.errorMessage,
-                                                    responseType = ResponseType.Dialog()
-                                            )
-                                    )
-                                }
-                                is ApiEmptyResponse ->{
-                                    value = DataState.error(
-                                            Response(
-                                                    message = ERROR_UNKNOWN,
-                                                    responseType = ResponseType.Dialog()
-                                            )
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+    fun attemptLogin(email: String, password: String) {
+        return dataSource.attemptLogin(email, password)
     }
 
 

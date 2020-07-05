@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface CredentialCheckApi {
 
     // CHECK CRED
-    @POST("https://2ac22668-386d-4700-8997-06068cfc43d0.mock.pstmn.io/login")
+    @POST("login")
     @FormUrlEncoded
     fun login(
             @Field("user_id") email: String,

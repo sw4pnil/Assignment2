@@ -19,8 +19,9 @@ import com.test.assignment.CountryListActivity
 import com.test.assignment.R
 import com.test.assignment.databinding.ActivityLoginBinding
 import com.test.assignment.login.data.LoggedInUserView
+import com.test.assignment.viewmodels.CountryListViewModel
 import com.test.assignment.viewmodels.LoginViewModel
-import com.test.assignment.viewmodels_factory.LoginViewModelFactory
+import com.test.assignment.viewmodels.LoginViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -32,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
+        //this.mCountryListViewModel = ViewModelProviders.of(this).get(CountryListViewModel::class.java)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
         binding.loginViewModel = loginViewModel

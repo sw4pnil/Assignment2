@@ -12,6 +12,7 @@ import com.test.assignment.login.data.LoginFormState
 import com.test.assignment.login.data.LoginResult
 import com.test.assignment.repositories.LoginRepository
 import com.test.assignment.models.Result
+import com.test.assignment.models.Result.Success
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -46,30 +47,31 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     }
 */
     fun login(view: View?) {
-        // can be launched in a separate asynchronous job
+       // can be launched in a separate asynchronous job
 
-       if(!EmailAddress.value.isNullOrEmpty() && !Password.value.isNullOrEmpty()){
-           val result = loginRepository.login(EmailAddress.value!!, Password.value!!)
+       if (!EmailAddress.value.isNullOrEmpty() && !Password.value.isNullOrEmpty()) {
+           val result = loginRepository.attemptLogin(EmailAddress.value!!, Password.value!!)
 
 
-        if (result is Result.Success) {
+           /*     if (result is Success<*>) {
            // userMutableLiveData?.setValue(result)
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.userId))
+            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.toString()))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
+       }*/
        }
-    }
+   }
+       fun loginDataChanged(username: String, password: String) {
+           if (!isUserNameValid(username)) {
+               _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+           } else if (!isPasswordValid(password)) {
+               _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+           } else {
+               _loginForm.value = LoginFormState(isDataValid = true)
+           }
+       }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
-        }
-    }
 
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {

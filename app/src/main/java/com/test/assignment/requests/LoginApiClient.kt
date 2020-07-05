@@ -2,8 +2,14 @@ package com.test.assignment.requests
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.test.assignment.AppExecutors
+import androidx.lifecycle.switchMap
+import com.test.assignment.*
+import com.test.assignment.custom.errors.ErrorHandler
 import com.test.assignment.models.Country
+import com.test.assignment.requests.api.CredentialCheckApi
+import com.test.assignment.util.ApiEmptyResponse
+import com.test.assignment.util.ApiErrorResponse
+import com.test.assignment.util.ApiSuccessResponse
 import com.test.assignment.util.Constants
 import okhttp3.Call
 import okhttp3.Callback
@@ -18,11 +24,41 @@ import java.util.concurrent.TimeUnit
  */
 class LoginApiClient internal constructor() {
 
+
+    companion object {
+        private const val TAG = "LoginApiClient"
+        @JvmStatic
+        var instance: LoginApiClient? = null
+            get() {
+                if (field == null) {
+                    field = LoginApiClient()
+                }
+                return field
+            }
+            private set
+    }
+
     private val mCategory: MutableLiveData<List<Country>?> = MutableLiveData()
     private val mCountryName: MutableLiveData<String?> = MutableLiveData()
 
     private var mRetrieveCountryRunnable: CredentialCheckRunnable? = null
     var arrayListDetails: ArrayList<Country> = ArrayList()
+
+    private var mCredRunnable: CredRunnable? = null
+
+
+    fun attemptLogin(email: String, password: String) {
+       // return
+
+        if (mCredRunnable != null) {
+            mCredRunnable = null
+        }
+        mCredRunnable = CredRunnable(email, password)
+        val handler = AppExecutors.get()?.networkIO()?.submit(mCredRunnable)
+        AppExecutors.get()?.networkIO()?.schedule({
+            handler?.cancel(true)
+        }, Constants.NETWORK_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+    }
 
     val category: LiveData<List<Country>?>
         get() = mCategory
@@ -88,6 +124,57 @@ class LoginApiClient internal constructor() {
         if (mRetrieveCountryRunnable != null) {
             mRetrieveCountryRunnable!!.cancelRequest()
         }
+    }
+
+    private inner class CredRunnable(val email: String,val password: String) : Runnable {
+        private var cancelRequest = false
+
+        override fun run() {
+            run(ServiceGenerator.provideRetrofitBuilder())
+        }
+
+        private fun run(call: CredentialCheckApi) {
+
+            call.login(email, password)
+                    .switchMap { response ->
+                        object : LiveData<DataState<AuthViewState>>() {
+                            override fun onActive() {
+                                super.onActive()
+                                when (response) {
+                                    is ApiSuccessResponse -> {
+                                        value = DataState.data(
+                                                AuthViewState(
+                                                        authToken = AuthToken(response.body.code, response.body.message)
+                                                ),
+                                                response = null
+                                        )
+                                    }
+                                    is ApiErrorResponse -> {
+                                        value = DataState.error(
+                                                Response(
+                                                        message = response.errorMessage,
+                                                        responseType = ResponseType.Dialog()
+                                                )
+                                        )
+                                    }
+                                    is ApiEmptyResponse -> {
+                                        value = DataState.error(
+                                                Response(
+                                                        message = ErrorHandler.ERROR_UNKNOWN,
+                                                        responseType = ResponseType.Dialog()
+                                                )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+        }
+
+        fun cancelRequest() {
+            cancelRequest = true
+        }
+
     }
 
 }

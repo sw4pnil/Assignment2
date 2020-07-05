@@ -1,6 +1,9 @@
 package com.test.assignment
 
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
+import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -23,5 +26,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun showProgressBar(visible: Boolean) {
         mProgressBar!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
     }
 }
